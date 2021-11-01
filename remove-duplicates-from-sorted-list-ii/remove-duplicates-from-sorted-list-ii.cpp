@@ -11,24 +11,24 @@
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        ListNode* dummy = new ListNode(0);
-        dummy->next = head;
-        ListNode* cur = dummy;
+        ListNode *temp=new ListNode(0);
+        temp->next=head;
+        ListNode *curr=temp;
         int duplicate;
-        while (cur->next && cur->next->next) {
-            if (cur->next->val == cur->next->next->val) {
-                duplicate = cur->next->val;
-                while (cur->next && cur->next->val == duplicate) {
-                    cur->next = cur->next->next;
+        
+        
+        while(curr->next!=NULL && curr->next->next!=NULL){
+            if(curr->next->val==curr->next->next->val){
+                duplicate=curr->next->val;
+                while(curr->next && curr->next->val== duplicate){
+                    //explain the above line 
+                    curr->next=curr->next->next;
                 }
-            }
-            else {
-                cur = cur->next;
-            }
+            }else
+                curr=curr->next;
+            
         }
-        return dummy->next;
-        
-        
+        return temp->next;
         
         
     }
