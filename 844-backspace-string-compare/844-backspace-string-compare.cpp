@@ -1,24 +1,26 @@
 class Solution {
 public:
     string count (string str){
-        stack<char>st;
-        for(int i=0; i<str.size(); i++){
-            if(str[i]=='#' && !st.empty())
-                    st.pop();
-            
-            else if(str[i]=='#')
-                continue;
-            else
-                st.push(str[i]);
-        }
-        
+        int i=str.size()-1;
         string ans;
+         int backspace=0;
         
-        while(!st.empty()){
-            ans+=st.top();
-            st.pop();
+        while(i>=0){
+           
+            
+            if(str[i]=='#')
+                backspace++;
+            
+            else if(backspace==0)
+                ans+=str[i];
+            
+                    
+            else if(backspace>0)
+                    backspace--;
+                
+            i--;
+                  
         }
-        
         return ans;
         
     }
