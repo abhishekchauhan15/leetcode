@@ -11,50 +11,44 @@
  */
 class Solution {
 public:
-vector<vector<int>> verticalTraversal(TreeNode* root) {
-    vector<vector<int>> ans;
-    //for collecting all values at a given r and c
-    //key is c to maintain order from left to right
-    
-    //int second map r is key 
-    //its matrix of vectors 
-    map<int, map<int, vector<int>>> mp;
-    //node and its position
-    queue<pair<TreeNode*, pair<int,int>>> q;
-    q.push({root,{0,0}});
-    
-    //normal level order traversal
-    while(!q.empty()){
-        auto p = q.front(); q.pop();
-        TreeNode* curr = p.first;
-        int r = p.second.first;
-        int c = p.second.second;
-        //note in map first is c then r in queue first is r then c
-        //in map first c is taken to maintain order as per c ie horizontal distance from root node
-        //left is -1 each step and right side +1 each step
-        mp[c][r].push_back(curr->val);
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        map<int ,map<int, multiset<int>>> mp ;
+        queue<pair<TreeNode *, pair<int, int>>>q;
         
-        if(curr->left) { q.push({curr->left, {r+1,c-1}}); }
-        if(curr->right) { q.push({curr->right, {r+1,c+1}}); }
-    }
-    
-    //now mp has matrix of vectors where each vector has all values at a certain r and c
-    //mp[2][0] has {6,5} which needs to be sorted while pushing into answer
-    
-    //for a certian c in map we have a another map with keys as r and values as vectors
-    for (auto c : mp) {
-        vector<int> col;
-        for(auto r : c.second){
-            //sort before filling
-            sort(r.second.begin(), r.second.end());
-            //this line simply takes data from the given vector and adds it
-            //to col vector ie data of all vectors(each in each row) in a given column
-            //are appended into single vector col
-            col.insert(col.end(), r.second.begin(), r.second.end());
+        q.push({root, {0 , 0}});
+        
+        while(!q.empty()){
+            auto data= q.front();
+            q.pop();
+            
+            TreeNode * node = data.first;
+            
+            int v=data.second.first;
+            int l= data.second.second;
+            
+            mp[v][l].insert(node->val);
+            
+            if(node->left)
+                q.push({node->left, {v-1, l+1}});
+            
+            if(node->right)
+                q.push({node->right, {v+1, l+1}});
+                 
         }
-        //push current column
-        ans.push_back(col);
+        
+        
+        vector<vector<int>>ans;
+        
+        for(auto p : mp){
+            vector<int>col;
+            for(auto q : p.second){
+                col.insert(col.end(), q.second.begin(), q.second.end());
+            }
+            ans.push_back(col);
+        }
+        
+        return ans;
+
+        
     }
-    return ans;
-}
 };
